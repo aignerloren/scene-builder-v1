@@ -106,7 +106,7 @@ export default function NavBar() {
               onClick={goWritingHelp}
               style={itemStyle}
             >
-              How to Use Scene Builder
+              Using Scene Builder
             </div>
             
             <div
