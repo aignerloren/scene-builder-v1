@@ -4,7 +4,6 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function AboutPage() {
-  const [authorName, setAuthorName] = useState(""); // ✅ FIXED
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -14,10 +13,6 @@ export default function AboutPage() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          author_name: authorName,
-          emailRedirectTo: "https://scenes.prohomewriters.com/login",
         },
       },
     });
