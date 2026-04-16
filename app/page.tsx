@@ -67,7 +67,7 @@ export default function AboutPage() {
         }}
       >
         <h1 style={{ textAlign: "center", color: "#333", fontSize: "2.5rem" }}>
-          Build Your Stories. Fix Your Scenes.
+          Build Your Stories. Fix Your Sceness.
         </h1>
 
         <br></br>
