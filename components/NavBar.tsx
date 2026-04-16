@@ -96,10 +96,10 @@ export default function NavBar() {
             </div>
 
             <div
-              onClick={goStoryLibrary}
+              onClick={goAbout}
               style={itemStyle}
             >
-              Story Library
+              About
             </div>
 
             <div
@@ -108,13 +108,15 @@ export default function NavBar() {
             >
               User Guide
             </div>
-
+            
             <div
-              onClick={goAbout}
+              onClick={goStoryLibrary}
               style={itemStyle}
             >
-              About
+              Story Library
             </div>
+
+            
           </div>
         )}
       </div>
