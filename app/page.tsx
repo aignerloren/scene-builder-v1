@@ -14,7 +14,6 @@ export default function AboutPage() {
       email,
       password,
         },
-      },
     });
 
     if (error) {
