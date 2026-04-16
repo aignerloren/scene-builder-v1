@@ -17,7 +17,7 @@ export default function AboutPage() {
       options: {
         data: {
           author_name: authorName,
-          emailRedirectTo: "http://localhost:3000/login",
+          emailRedirectTo: "https://scenes.prohomewriters.com/login",
         },
       },
     });
@@ -67,7 +67,7 @@ export default function AboutPage() {
         }}
       >
         <h1 style={{ textAlign: "center", color: "#333", fontSize: "2.5rem" }}>
-          Build Your Stories. Fix Your Sceness.
+          Build Your Stories. Fix Your Scenes.
         </h1>
 
         <br></br>
