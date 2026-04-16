@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { sceneTemplates } from "@/lib/sceneTemplates";
-import { useUserProfile } from "@/lib/useUserProfile";
+
 
 export default function Dashboard() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function Dashboard() {
 
   const [projectTitle, setProjectTitle] = useState("");
   const [projectGenre, setProjectGenre] = useState("");
-  const { userId, authorName, loading } = useUserProfile();
+
 
   // SESSION
   const checkSession = useCallback(async () => {
@@ -153,7 +153,7 @@ export default function Dashboard() {
       >
         {/* HEADER */}
         <p style={{ color: "#fff", marginBottom: "1rem" }}>
-          Welcome back, {authorName}! Pick up where you left off or start something new.
+          Welcome back! Pick up where you left off or start something new.
         </p>
 
         {/* BUTTON ROW */}
