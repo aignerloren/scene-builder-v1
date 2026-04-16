@@ -10,18 +10,17 @@ export default function AboutPage() {
 
   // ✅ SIGN UP
   const handleSignUp = async () => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
-      },
-    });
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
 
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage("Check your email to confirm your account.");
-    }
-  };
+  if (error) {
+    setMessage(error.message);
+  } else {
+    setMessage("Check your email to confirm your account.");
+  }
+};
 
   // ✅ LOGIN
   const handleLogin = async () => {
