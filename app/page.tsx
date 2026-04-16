@@ -124,18 +124,6 @@ export default function AboutPage() {
           }}
         >
           <input
-            type="text"
-            placeholder="Author Name"
-            value={authorName}
-            onChange={(e) => setAuthorName(e.target.value)}
-            style={{
-              padding: "0.6rem",
-              borderRadius: "8px",
-              border: "1px solid #ccc",
-            }}
-          />
-
-          <input
             type="email"
             placeholder="Email"
             value={email}
