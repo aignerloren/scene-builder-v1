@@ -25,7 +25,7 @@ export default function HelpPage() {
           How to Use Scene Builder
         </h1>
         <br></br>
-        <p>To use the Scene Builder, you must fist have an account. Once you've signed up, you can log in and start building your stories.</p>
+        <p>To use the Scene Builder, you must first have an account. Once you've signed up, you can log in and start building your stories.</p>
         <br></br>
         <p>Once you login to your account, you'll be taken to your personal story library. Think about this like your own bookshel at you favorite book store. You can create up to two stories on the current plan. To start a new story in your personal library, click the "New Story" button.</p>
         <br></br>
