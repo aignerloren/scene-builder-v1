@@ -12,7 +12,8 @@ export default function AboutPage() {
   const handleSignUp = async () => {
     const { error } = await supabase.auth.signUp({
       email,
-      password,},
+      password
+      },
     });
 
     if (error) {
