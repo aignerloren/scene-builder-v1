@@ -65,7 +65,7 @@ export default function AboutPage() {
 
         <br></br>
 
-        <p>
+        <p style={{color: "#333"}}>
           The Scene Builder is an editor designed tool for building stories scene by scene. You can use the Scene Builder to break down each of your story's scenes into digital scene cards. Each scene card contains details about the scene, including characters, settings, and actions. When you start a new story in your personal library, you get to choose its primary genre so that your story starts off with four obligatory scenes to help you get started. These scenes were chosen by a real editor, using real genre expertise, resources like the Story Grid, Story by Robert McKee, and more.
         </p>
 
@@ -84,7 +84,7 @@ export default function AboutPage() {
 
         <br></br>
 
-        <p>
+        <p style={{color: "#333"}}>
           Once you have built your scenes, you can organize them into a cohesive narrative structure. For help pinpointing potential problem areas, the Scene Builder comes with a narrative analysis feature that uses the details of your scene to determine where your pacing is too fast or slow, where your conflicts and resolutions are, and more.
         </p>
 
@@ -103,7 +103,7 @@ export default function AboutPage() {
 
         <br></br>
 
-        <p>
+        <p style={{color: "#333"}}>
           Whether you're a novelist, screenwriter, or game designer, the Scene Builder is a powerful tool for crafting compelling stories. Signup or login below to start building your stories.
         </p>
 
@@ -125,6 +125,7 @@ export default function AboutPage() {
               padding: "0.6rem",
               borderRadius: "8px",
               border: "1px solid #ccc",
+              color: "#333",
             }}
           />
 
@@ -137,6 +138,7 @@ export default function AboutPage() {
               padding: "0.6rem",
               borderRadius: "8px",
               border: "1px solid #ccc",
+              color: "#333",
             }}
           />
 
@@ -150,6 +152,7 @@ export default function AboutPage() {
                 border: "1px solid #000",
                 background: "#FFDB00",
                 cursor: "pointer",
+                color: "#333",
               }}
             >
               Sign Up
