@@ -232,7 +232,7 @@ const getPacingColor = (scene: Scene, index: number) => {
         border: "40px solid #d2b48c",
       }}
     >
-      <h1 style={{ textAlign: "center" }}>Build Your Story Scene by Scene</h1>
+      <h1 style={{ color: "#333", textAlign: "center" }}>Build Your Story Scene by Scene</h1>
 
       {/* ADD SCENE */}
       <form
@@ -246,7 +246,7 @@ const getPacingColor = (scene: Scene, index: number) => {
           value={sceneTitle}
           onChange={(e) => setSceneTitle(e.target.value)}
           placeholder="Enter Scene Title"
-          style={{ padding: "0.6rem", border: "1px solid #ccc", borderRadius: "6px" }}
+          style={{ color: "#333", padding: "0.6rem", border: "1px solid #ccc", borderRadius: "6px" }}
         />
         <button 
             style={{
@@ -262,7 +262,7 @@ const getPacingColor = (scene: Scene, index: number) => {
       </form>
 
       {/* SCENE BOARD */}
-      <p style={{ textAlign: "center" }}>
+      <p style={{ color: "#333", textAlign: "center" }}>
         Drag and drop scenes OR edit scene number to reorder
       </p>
 
@@ -276,6 +276,7 @@ const getPacingColor = (scene: Scene, index: number) => {
           padding: "1rem",
           background: "#e6d3a3",
           borderRadius: "12px",
+          color: "#333",
         }}
       >
         {scenes.map((scene) => (
@@ -295,6 +296,7 @@ const getPacingColor = (scene: Scene, index: number) => {
   cursor: "grab",
   textAlign: "left",
   fontFamily: "serif",
+  color: "#333",
               border: selectedScene?.id === scene.id ? "2px solid black" : "1px solid #ccc",
               boxShadow: `0 0 0 3px ${getPacingColor(scene, scenes.findIndex(s => s.id === scene.id))}`,
             }}
@@ -330,9 +332,10 @@ const getPacingColor = (scene: Scene, index: number) => {
       background: "#fffdf7",
       borderRadius: "12px",
       boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+      color: "#333",
     }}
   >
-    <h2 style={{ marginBottom: "1.5rem" }}>📊 Story Diagnostic</h2>
+    <h2 style={{ color: "#333", marginBottom: "1.5rem" }}>📊 Story Diagnostic</h2>
 
     {/* DATA */}
     {(() => {
@@ -388,8 +391,8 @@ const getPacingColor = (scene: Scene, index: number) => {
             );
 
       const ProgressBar = ({ label, value }: any) => (
-        <div style={{ marginBottom: "1rem" }}>
-          <div style={{ fontSize: "0.85rem", marginBottom: "0.25rem" }}>
+        <div style={{ color: "#333", marginBottom: "1rem" }}>
+          <div style={{ color: "#333", fontSize: "0.85rem", marginBottom: "0.25rem" }}>
             {label}
           </div>
           <div
@@ -399,6 +402,7 @@ const getPacingColor = (scene: Scene, index: number) => {
               background: "#eee",
               borderRadius: "6px",
               overflow: "hidden",
+              color: "#333",
             }}
           >
             <div
@@ -406,6 +410,7 @@ const getPacingColor = (scene: Scene, index: number) => {
                 width: `${value}%`,
                 height: "100%",
                 background: "#0070f3",
+                color: "#333",
               }}
             />
           </div>
@@ -444,20 +449,21 @@ const getPacingColor = (scene: Scene, index: number) => {
               background: "#f4f8ff",
               borderRadius: "10px",
               textAlign: "center",
+              color: "#333",
             }}
           >
-            <div style={{ display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-  <h3 style={{ margin: 0 }}>Story Health</h3>
+            <div style={{ color: "#333", display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
+  <h3 style={{ color: "#333", margin: 0 }}>Story Health</h3>
   <span style={{ fontSize: "1.2rem", color: "#666" }}>
     {healthScore}%
   </span>
   {/* PACING GRAPH */}
-<div style={{ marginTop: "1rem" }}>
-  <div style={{ fontSize: "0.9rem", marginBottom: "0.5rem" }}>
+<div style={{ color: "#333", marginTop: "1rem" }}>
+  <div style={{ color: "#333", fontSize: "0.9rem", marginBottom: "0.5rem" }}>
     Scene Pacing
   </div>
 
-  <div style={{ display: "flex", gap: "4px", height: "18px" }}>
+  <div style={{ color: "#333", display: "flex", gap: "4px", height: "18px" }}>
     {scenes.map((scene, i) => (
       <div
         key={scene.id}
@@ -466,6 +472,7 @@ const getPacingColor = (scene: Scene, index: number) => {
           flex: 1,
           background: getPacingColor(scene, i),
           borderRadius: "4px",
+          color: "#333",
         }}
       />
     ))}
@@ -479,7 +486,7 @@ const getPacingColor = (scene: Scene, index: number) => {
           </div>
 
           {/* PROGRESS SECTION */}
-          <div style={{ marginBottom: "2rem" }}>
+          <div style={{ color: "#333", marginBottom: "2rem" }}>
             <h3>Completeness</h3>
 
             <ProgressBar
@@ -489,6 +496,7 @@ const getPacingColor = (scene: Scene, index: number) => {
                   ? ((totalScenes - missingConflict) / totalScenes) * 100
                   : 0
               }
+              style= {{color: "#333"}}
             />
 
             <ProgressBar
@@ -498,6 +506,7 @@ const getPacingColor = (scene: Scene, index: number) => {
                   ? ((totalScenes - missingResolution) / totalScenes) * 100
                   : 0
               }
+              style= {{color: "#333"}}
             />
 
             <ProgressBar
@@ -507,15 +516,17 @@ const getPacingColor = (scene: Scene, index: number) => {
                   ? ((totalScenes - missingSetting) / totalScenes) * 100
                   : 0
               }
+              style= {{color: "#333"}}
               
             />
             {/* VALUE SHIFT SECTION */}
 <div style={{ marginBottom: "2rem" }}>
-  <h3>Value Shift Strength</h3>
+  <h3 style= {{color: "#333"}}>Value Shift Strength</h3>
 
   <ProgressBar
     label="Scenes with Value Change"
     value={valueShiftScore}
+    style= {{color: "#333"}}
   />
 
   {flatSceneCount > 0 && (
@@ -525,11 +536,12 @@ const getPacingColor = (scene: Scene, index: number) => {
         padding: "1rem",
         background: "#fff4f4",
         borderRadius: "8px",
+        color: "#333",
       }}
     >
-      <strong>⚠️ Flat Scenes Detected:</strong>
+      <strong style= {{color: "#333"}}>⚠️ Flat Scenes Detected:</strong>
 
-      <ul style={{ marginTop: "0.5rem", paddingLeft: "1rem" }}>
+      <ul style={{color: "#333", marginTop: "0.5rem", paddingLeft: "1rem" }}>
         {flatScenes.map((scene) => (
           <li key={scene.scene_number}>
             Scene {scene.scene_number}: {scene.scene_title}
@@ -548,6 +560,7 @@ const getPacingColor = (scene: Scene, index: number) => {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
               gap: "1rem",
+              color: "#333",
             }}
           >
             <div style={statCard}>
@@ -584,7 +597,7 @@ const getPacingColor = (scene: Scene, index: number) => {
       }}
     >
       {/* HEADER */}
-      <h2 style={{ gridColumn: "1 / -1", marginBottom: "1rem" }}>
+      <h2 style={{ color: "#333", gridColumn: "1 / -1", marginBottom: "1rem" }}>
         Editing: {selectedScene.scene_title}
       </h2>
 
@@ -604,12 +617,13 @@ const getPacingColor = (scene: Scene, index: number) => {
         "target_word_count",
         "summary",
       ].map((key) => (
-        <div key={key} style={{ display: "flex", flexDirection: "column" }}>
+        <div key={key} style={{ color: "#333", display: "flex", flexDirection: "column" }}>
           <label
             style={{
               fontSize: "0.8rem",
               marginBottom: "0.25rem",
               textTransform: "capitalize",
+              color: "#333",
             }}
           >
             {key.replace(/_/g, " ")}
@@ -632,6 +646,7 @@ const getPacingColor = (scene: Scene, index: number) => {
                 boxSizing: "border-box",
                 height: "300px",
                 width: "200%",
+                color: "#333",
               }}
             />
           ) : (
@@ -652,6 +667,7 @@ const getPacingColor = (scene: Scene, index: number) => {
                 border: "1px solid #ccc",
                 borderRadius: "6px",
                 background: "#fff",
+                color: "#333",
               }}
             />
           )}
@@ -665,7 +681,7 @@ const getPacingColor = (scene: Scene, index: number) => {
           marginTop: "1rem",
           padding: "0.75rem",
           background: "#0070f3",
-          color: "#fff",
+          color: "#333",
           border: "none",
           borderRadius: "8px",
           cursor: "pointer",
