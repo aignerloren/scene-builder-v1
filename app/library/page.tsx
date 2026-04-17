@@ -181,6 +181,7 @@ export default function Dashboard() {
               background: "#FFDB00",
               fontWeight: "bold",
               cursor: "pointer",
+              color: "#333",
             }}
           >
             {showNewProjectForm ? "Cancel" : "➕ New Story"}
