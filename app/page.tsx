@@ -60,7 +60,7 @@ export default function AboutPage() {
         }}
       >
         <h1 style={{ textAlign: "center", color: "#333", fontSize: "2.5rem" }}>
-          Build Your Stories. Fix Your Scenes.
+          Build Your Scenes. Fix Your Stories.
         </h1>
 
         <br></br>
@@ -75,7 +75,10 @@ export default function AboutPage() {
           src="https://prohomewriters.com/wp-content/uploads/2026/04/scene-card-v1.-obligatory-scenes.png"
           alt="Scene Builder Scene Card"
           style={{
-            width: "75%",
+            width: "100%",
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
             margin: "0 auto",
             borderRadius: "12px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -94,7 +97,10 @@ export default function AboutPage() {
           src="https://prohomewriters.com/wp-content/uploads/2026/04/scene-card-v1.-story-diagnostic.png"
           alt="Scene Builder Story Diagnostic"
           style={{
-            width: "75%",
+            width: "100%",
+            maxWidth: "100%",
+            height: "auto",
+            display: "block",
             margin: "0 auto",
             borderRadius: "12px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
