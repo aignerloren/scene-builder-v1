@@ -619,6 +619,7 @@ const getPacingColor = (scene: Scene, index: number) => {
               fontSize: "0.8rem",
               marginBottom: "0.25rem",
               textTransform: "capitalize",
+              color: "#333",
             }}
           >
             {key.replace(/_/g, " ")}
