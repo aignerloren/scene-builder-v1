@@ -211,6 +211,7 @@ export default function Dashboard() {
                 flex: "1",
                 minWidth: "200px",
                 background: "#ffffff",
+                color: "#333",
               }}
             />
 
@@ -222,6 +223,7 @@ export default function Dashboard() {
                 borderRadius: "8px",
                 border: "1px solid #030303",
                 background: "#c3c9f8",
+                color: "#333",
               }}
             >
               <option value="">Genre</option>
