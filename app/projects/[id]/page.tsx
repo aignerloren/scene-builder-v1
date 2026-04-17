@@ -681,7 +681,7 @@ const getPacingColor = (scene: Scene, index: number) => {
           marginTop: "1rem",
           padding: "0.75rem",
           background: "#0070f3",
-          color: "#333",
+          color: "#FFF",
           border: "none",
           borderRadius: "8px",
           cursor: "pointer",
