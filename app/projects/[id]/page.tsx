@@ -566,14 +566,18 @@ const getPacingColor = (scene: Scene, index: number) => {
               <div style={statValue}>{totalWords}</div>
             </div>
 
-            <div style={statCard}>
-              <div style={statLabel}>Avg Words / Scene</div>
-              <div style={statValue}>{avgWords}</div>
-            </div>
+      <div style={statCard}>
+          <div style={statLabel}>Avg Words / Scene</div>
+          <div style={statValue}>{avgWords}</div>
+        </div>
+      </div>
           </div>
-      );
-) : (
-        selectedScene && (
+        </>
+  );
+})()}
+    </div>
+  ) : (
+    selectedScene && (
     <div
       style={{
         marginTop: "2rem",
@@ -582,7 +586,7 @@ const getPacingColor = (scene: Scene, index: number) => {
         borderRadius: "12px",
 
         display: "grid",
-        gridTemplateColumns: "(auto-fit, minmax(220px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
         gap: "1rem",
       }}
     >
