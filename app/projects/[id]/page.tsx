@@ -571,7 +571,6 @@ const getPacingColor = (scene: Scene, index: number) => {
               <div style={statValue}>{avgWords}</div>
             </div>
           </div>
-        </>
       );
 ) : (
         selectedScene && (
