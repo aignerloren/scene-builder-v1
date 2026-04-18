@@ -555,7 +555,7 @@ const getPacingColor = (scene: Scene, index: number) => {
         ))}
       </ul>
     </div>
-    {(missingCharacters > 0 || missingSetting > 0 || missingSummary > 0) && (
+    {{(missingCharacters > 0 || missingSetting > 0 || missingSummary > 0) && (
   <div
     style={{
       marginTop: "1rem",
