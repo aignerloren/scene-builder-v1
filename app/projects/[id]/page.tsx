@@ -518,9 +518,22 @@ const getPacingColor = (scene: Scene, index: number) => {
   <h3>Value Shift Strength</h3>
 
   <ProgressBar
-    label="Scenes with Value Change"
-    value={valueShiftScore}
-  />
+  label="Scenes with Value Change"
+  value={valueShiftPercent}
+/>
+
+<div style={{ marginTop: "1rem",
+      padding: "1rem",
+      background: "#f1b8a6",
+      borderRadius: "8px",
+      color: "#333",}}>
+  {valueShiftGoalMet ? (
+    <span>✅ Value shifts are happening in at least 70% of scenes.</span>
+  ) : (
+    <span>⚠️ Value shifts are happening in less than 70% of scenes.</span>
+  )}
+</div>
+<br></br>
 
   {flatSceneCount > 0 && (
     <div
@@ -542,7 +555,23 @@ const getPacingColor = (scene: Scene, index: number) => {
         ))}
       </ul>
     </div>
-    
+    {(missingCharacters > 0 || missingSetting > 0 || missingSummary > 0) && (
+  <div
+    style={{
+      marginTop: "1rem",
+      padding: "1rem",
+      background: "#fff8e8",
+      borderRadius: "8px",
+      color: "#333",
+    }}
+  >
+    <strong>⚠️ Required Story Details Missing:</strong>
+    <ul style={{ marginTop: "0.5rem", paddingLeft: "1rem" }}>
+      {missingCharacters > 0 && <li>{missingCharacters} scene(s) missing characters</li>}
+      {missingSetting > 0 && <li>{missingSetting} scene(s) missing setting</li>}
+      {missingSummary > 0 && <li>{missingSummary} scene(s) missing summary</li>}
+    </ul>
+  </div>
   )}
 </div>
           </div>
