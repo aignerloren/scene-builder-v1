@@ -487,35 +487,32 @@ const getPacingColor = (scene: Scene, index: number) => {
           <div style={{ color: "#333", marginBottom: "2rem" }}>
             <h3>Completeness</h3>
 
-            <ProgressBar
-              label="Scenes with Conflict"
-              value={
-                totalScenes
-                  ? ((totalScenes - missingConflict) / totalScenes) * 100
-                  : 0
-              }
-                            style= {{color: "#333"}}
-            />
+<ProgressBar
+  label="Scenes with Characters"
+  value={
+    totalScenes
+      ? ((totalScenes - missingCharacters) / totalScenes) * 100
+      : 0
+  }
+/>
 
-            <ProgressBar
-              label="Scenes with Resolution"
-              value={
-                totalScenes
-                  ? ((totalScenes - missingResolution) / totalScenes) * 100
-                  : 0
-              }
-                            style= {{color: "#333"}}
-            />
+<ProgressBar
+  label="Scenes with Setting"
+  value={
+    totalScenes
+      ? ((totalScenes - missingSetting) / totalScenes) * 100
+      : 0
+  }
+/>
 
-            <ProgressBar
-              label="Scenes with Setting"
-              value={
-                totalScenes
-                  ? ((totalScenes - missingSetting) / totalScenes) * 100
-                  : 0
-              }
-                            style= {{color: "#333"}}
-            />
+<ProgressBar
+  label="Scenes with Summary"
+  value={
+    totalScenes
+      ? ((totalScenes - missingSummary) / totalScenes) * 100
+      : 0
+  }
+/>
             {/* VALUE SHIFT SECTION */}
 <div style={{ marginBottom: "2rem" }}>
   <h3>Value Shift Strength</h3>
