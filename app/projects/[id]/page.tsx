@@ -571,6 +571,7 @@ const getPacingColor = (scene: Scene, index: number) => {
               <div style={statValue}>{avgWords}</div>
             </div>
           </div>
+          </>
       );
     })()}
   </div>
@@ -584,7 +585,7 @@ const getPacingColor = (scene: Scene, index: number) => {
         borderRadius: "12px",
 
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+        gridTemplateColumns: "(auto-fit, minmax(220px, 1fr))",
         gap: "1rem",
       }}
     >
