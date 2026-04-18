@@ -546,7 +546,6 @@ const getPacingColor = (scene: Scene, index: number) => {
       </ul>
     </div>
   )}
-</>
           </div>
 
           {/* STATS GRID */}
