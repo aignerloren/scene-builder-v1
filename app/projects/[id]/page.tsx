@@ -641,7 +641,7 @@ const getPacingColor = (scene: Scene, index: number) => {
                 background: "#fff",
                 boxSizing: "border-box",
                 height: "300px",
-                width: "100%",
+                minWidth: "100%",
                 minHeight: "120px",
                 color: "#333",
               }}
