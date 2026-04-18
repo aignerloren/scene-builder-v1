@@ -339,56 +339,55 @@ const getPacingColor = (scene: Scene, index: number) => {
 
     {/* DATA */}
     {(() => {
-      const totalScenes = scenes.length;
-
-      const missingConflict = scenes.filter(
-        (s) =>
-          !s.internal_conflict &&
-          !s.external_conflict &&
-          !s.scene_conflict
-      ).length;
-
-      const missingResolution = scenes.filter((s) => !s.resolution).length;
-      const missingSetting = scenes.filter((s) => !s.setting).length;
-
       const totalWords = scenes.reduce(
-        (sum, s) => sum + (s.target_word_count || 0),
-        0
+  (sum, s) => sum + (s.target_word_count || 0),
+  0
+);
+
+const avgWords =
+  totalScenes > 0 ? Math.round(totalWords / totalScenes) : 0;
+
+// value shift = both values filled in and different
+const valueChangedCount = scenes.filter((s) => {
+  const a = String(s.beginning_value ?? "").trim();
+  const b = String(s.ending_value ?? "").trim();
+  return a !== "" && b !== "" && a !== b;
+}).length;
+
+const valueShiftPercent =
+  totalScenes > 0 ? Math.round((valueChangedCount / totalScenes) * 100) : 0;
+
+const valueShiftGoalMet = valueShiftPercent >= 70;
+
+// scenes with same beginning/end value
+const flatScenes = scenes.filter((s) => {
+  const a = String(s.beginning_value ?? "").trim();
+  const b = String(s.ending_value ?? "").trim();
+  if (a === "" && b === "") return false;
+  return a === b;
+});
+
+const flatSceneCount = flatScenes.length;
+
+// completeness score based on required fields
+const requiredFieldChecks = totalScenes * 3; // characters, setting, summary
+const missingRequiredTotal =
+  missingCharacters + missingSetting + missingSummary;
+
+const requiredFieldsScore =
+  totalScenes === 0
+    ? 0
+    : Math.round(
+        ((requiredFieldChecks - missingRequiredTotal) / requiredFieldChecks) * 100
       );
 
-      const avgWords =
-        totalScenes > 0 ? Math.round(totalWords / totalScenes) : 0;
-
-      // compute value shift metrics
-      const valueChangedCount = scenes.filter((s) => {
-        const a = String(s.beginning_value ?? "").trim();
-        const b = String(s.ending_value ?? "").trim();
-        return a !== "" && b !== "" && a !== b;
-      }).length;
-
-      const valueShiftScore = totalScenes ? Math.round((valueChangedCount / totalScenes) * 100) : 0;
-
-      const flatScenes = scenes.filter((s) => {
-        const a = String(s.beginning_value ?? "").trim();
-        const b = String(s.ending_value ?? "").trim();
-        if (a === "" && b === "") return false; // ignore scenes with no values
-        return a === b;
-      });
-
-      const flatSceneCount = flatScenes.length;
-
-      // 🔥 Health score (simple but powerful)
-      const healthScore =
-        totalScenes === 0
-          ? 0
-          : Math.round(
-              100 -
-                ((missingConflict +
-                  missingResolution +
-                  missingSetting) /
-                  (totalScenes * 3)) *
-                  100
-            );
+// final health score:
+// 50% required fields
+// 50% value shift threshold performance
+const healthScore =
+  totalScenes === 0
+    ? 0
+    : Math.round((requiredFieldsScore * 0.5) + (valueShiftPercent * 0.5));
 
       const ProgressBar = ({ label, value }: any) => (
         <div style={{ color: "#333", marginBottom: "1rem" }}>
