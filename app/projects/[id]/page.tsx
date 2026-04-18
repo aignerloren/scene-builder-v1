@@ -57,40 +57,6 @@ export default function StoryPage() {
 
     if (error) {
       console.error(error.message);
-      const getWordCount = (scene: Scene) => scene.target_word_count || 0;
-
-// Determine if a scene is "red flagged" due to adjacency
-const isAdjacentClash = (index: number) => {
-  const current = scenes[index];
-  const prev = scenes[index - 1];
-  const next = scenes[index + 1];
-
-  const wc = getWordCount(current);
-
-  if (prev && Math.abs(wc - getWordCount(prev)) <= 500) return true;
-  if (next && Math.abs(wc - getWordCount(next)) <= 500) return true;
-
-  return false;
-};
-
-const getScenePacing = (scene: Scene, index: number) => {
-  const wc = getWordCount(scene);
-
-  const isRed = wc > 1500 || isAdjacentClash(index);
-  if (isRed) return "red";
-
-  if (wc < 500) return "yellow";
-
-  return "neutral";
-};
-
-const getPacingColor = (scene: Scene, index: number) => {
-  const pace = getScenePacing(scene, index);
-
-  if (pace === "red") return "#e74c3c";
-  if (pace === "yellow") return "#f1c40f";
-  return "#dcdcdc";
-};
       return;
     }
 
@@ -339,6 +305,11 @@ const getPacingColor = (scene: Scene, index: number) => {
 
     {/* DATA */}
     {(() => {
+    const totalScenes = scenes.length;
+
+const missingCharacters = scenes.filter((s) => !s.characters?.trim()).length;
+const missingSetting = scenes.filter((s) => !s.setting?.trim()).length;
+const missingSummary = scenes.filter((s) => !s.summary?.trim()).length;
       const totalWords = scenes.reduce(
   (sum, s) => sum + (s.target_word_count || 0),
   0
@@ -555,25 +526,27 @@ const getPacingColor = (scene: Scene, index: number) => {
         ))}
       </ul>
     </div>
-    {(missingCharacters > 0 || missingSetting > 0 || missingSummary > 0) && (
-  <div
-    style={{
-      marginTop: "1rem",
-      padding: "1rem",
-      background: "#fff8e8",
-      borderRadius: "8px",
-      color: "#333",
-    }}
-  >
-    <strong>⚠️ Required Story Details Missing:</strong>
-    <ul style={{ marginTop: "0.5rem", paddingLeft: "1rem" }}>
-      {missingCharacters > 0 && <li>{missingCharacters} scene(s) missing characters</li>}
-      {missingSetting > 0 && <li>{missingSetting} scene(s) missing setting</li>}
-      {missingSummary > 0 && <li>{missingSummary} scene(s) missing summary</li>}
-    </ul>
-  </div>
   )}
-</div>
+
+  {(missingCharacters > 0 || missingSetting > 0 || missingSummary > 0) && (
+    <div
+      style={{
+        marginTop: "1rem",
+        padding: "1rem",
+        background: "#fff8e8",
+        borderRadius: "8px",
+        color: "#333",
+      }}
+    >
+      <strong>⚠️ Required Story Details Missing:</strong>
+      <ul style={{ marginTop: "0.5rem", paddingLeft: "1rem" }}>
+        {missingCharacters > 0 && <li>{missingCharacters} scene(s) missing characters</li>}
+        {missingSetting > 0 && <li>{missingSetting} scene(s) missing setting</li>}
+        {missingSummary > 0 && <li>{missingSummary} scene(s) missing summary</li>}
+      </ul>
+    </div>
+  )}
+</>
           </div>
 
           {/* STATS GRID */}
