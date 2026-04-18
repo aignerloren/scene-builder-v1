@@ -635,14 +635,13 @@ const getPacingColor = (scene: Scene, index: number) => {
                 })
               }
               style={{
-                padding: "0.6rem",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-                background: "#fff",
-                boxSizing: "border-box",
-                height: "300px",
-                minWidth: "200%",
-                minHeight: "120px",
+                width: "100%",
+  minHeight: "120px",
+  padding: "0.6rem",
+  border: "1px solid #ccc",
+  borderRadius: "6px",
+  background: "#fff",
+  boxSizing: "border-box",
                 color: "#333",
               }}
             />
