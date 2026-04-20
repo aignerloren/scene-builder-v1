@@ -68,7 +68,7 @@ export default function LoginPage() {
         }}
       >
         {/* HEADER */}
-        <h1 style={{ textAlign: "center", marginBottom: "0.5rem" }}>
+        <h1 style={{ textAlign: "center", marginBottom: "0.5rem", color: "#333" }}>
           Welcome Back!
         </h1>
         {/* EMAIL */}
@@ -81,6 +81,7 @@ export default function LoginPage() {
             padding: "0.6rem",
             borderRadius: "8px",
             border: "1px solid #ccc",
+            color: "#333",
           }}
         />
 
@@ -94,6 +95,7 @@ export default function LoginPage() {
             padding: "0.6rem",
             borderRadius: "8px",
             border: "1px solid #ccc",
+            color: "#333",
           }}
         />
 
@@ -123,6 +125,7 @@ export default function LoginPage() {
               border: "1px solid #000",
               background: "#FFDB00",
               cursor: "pointer",
+              color: "#333",
             }}
           >
             Sign Up
