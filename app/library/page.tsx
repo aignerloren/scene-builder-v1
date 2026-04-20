@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { sceneTemplates } from "@/lib/sceneTemplates";
+import BugReportForm from "@/components/BugReportForm";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -310,6 +311,7 @@ export default function Dashboard() {
                 >
                   {proj.title}
                 </div>
+                      <BugReportForm />
               );
             })
           )}
