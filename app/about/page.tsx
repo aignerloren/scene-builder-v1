@@ -44,7 +44,6 @@ export default function AboutPage() {
         <p style={{color: "#333"}}>She was a senior fiction editor for Strange Horizons and a former associate editor for the Black horror podcast NIGHTLIGHT. Along with her work with Strange Horizons and NIGHTLIGHT, she’s served as guest editor for Apparition Literary’s Contamination issue and Fireside Magazine’s 2022 winter issues. She’s also been a judge for NYC Midnight’s short story contests.</p>
       <br></br>
       <p style={{color: "#333"}}>She earned her MFA in Fiction from the Bennington Writing Seminars and has taught through Clarion West. Her writing related articles have been featured in The Writer's Digest, The Writer Magazine, Writer's Cooperative, and more.</p>
-                import BugReportForm from "@/components/BugReportForm";       
            <BugReportForm />
       </div>
     </div>
