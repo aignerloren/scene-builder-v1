@@ -560,7 +560,7 @@ const getMovementPoints = () => {
         </div>
 
         <div style={{ fontSize: "0.75rem", marginTop: "0.75rem", color: "#777" }}>
-          -- mega down shift · - down shift · -+ complicated negative shift · +- complicated positive shift · + upward movement · ++ mega upward movement
+          -- extreme down shift · - down shift · -+ complicated negative shift · +- complicated positive shift · + upward movement · ++ extreme upward movement
         </div>
       </div>
     );
