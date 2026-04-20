@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import BugReportForm from "@/components/BugReportForm";
 
 export default function AboutPage() {
   const [authorName, setAuthorName] = useState(""); // ✅ FIXED
@@ -198,6 +199,7 @@ export default function AboutPage() {
             </p>
           )}
         </div>
+        <BugReportForm />
       </div>
     </div>
   );
