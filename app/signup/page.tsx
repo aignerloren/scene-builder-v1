@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import BugReportForm from "@/components/BugReportForm";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -186,6 +187,7 @@ export default function LoginPage() {
           </p>
         )}
       </div>
+            <BugReportForm />
     </div>
   );
 }
