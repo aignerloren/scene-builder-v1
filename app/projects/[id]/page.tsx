@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import BugReportForm from "@/components/BugReportForm";
 
 interface Scene {
   id: string;
@@ -829,6 +830,7 @@ const getMovementPoints = () => {
     </div>
   )
 )}
+      <BugReportForm />
     </div>
   );
 }
