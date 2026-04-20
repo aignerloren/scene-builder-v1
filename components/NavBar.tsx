@@ -94,6 +94,14 @@ export default function NavBar() {
             >
               Home
             </div>
+            
+            <div
+              onClick={goStoryLibrary}
+              style={itemStyle}
+            >
+              Story Library
+            </div>
+            
             <div
               onClick={goWritingHelp}
               style={itemStyle}
