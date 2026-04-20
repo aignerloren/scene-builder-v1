@@ -197,7 +197,7 @@ export default function Dashboard() {
 </button>
 {projects.length >= 2 && (
   <p style={{ color: "#fff", marginTop: "0.5rem" }}>
-    V1 beta users can create up to 2 stories.
+    The current version of Scene Builder only allows for 2 stories per user. More coming soon!
   </p>
 )}
         </div>
