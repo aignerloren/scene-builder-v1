@@ -146,8 +146,8 @@ export default function LoginPage() {
             {message}
           </p>
         )}
-              <BugReportForm />
       </div>
     </div>
+                  <BugReportForm />
   );
 }
