@@ -1,6 +1,6 @@
-export default function AboutPage() {
+export default function AboutPage() { 
+     import BugReportForm from "@/components/BugReportForm";
   return (
-   import BugReportForm from "@/components/BugReportForm";
     <div
       style={{
         minHeight: "100vh",
