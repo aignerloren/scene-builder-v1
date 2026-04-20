@@ -5,7 +5,6 @@ import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { sceneTemplates } from "@/lib/sceneTemplates";
 
-
 export default function Dashboard() {
   const router = useRouter();
 
@@ -16,7 +15,6 @@ export default function Dashboard() {
 
   const [projectTitle, setProjectTitle] = useState("");
   const [projectGenre, setProjectGenre] = useState("");
-
 
   // SESSION
   const checkSession = useCallback(async () => {
@@ -52,8 +50,14 @@ export default function Dashboard() {
 
   // CREATE PROJECT (unchanged logic)
   const handleCreateProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!projectTitle || !projectGenre || !user) return;
+  e.preventDefault();
+
+  if (!projectTitle || !projectGenre || !user) return;
+
+  if (projects.length >= 2) {
+    alert("Free beta users can create up to 2 stories in V1.");
+    return;
+  }
 
     const { data, error } = await supabase
       .from("Projects")
@@ -153,7 +157,7 @@ export default function Dashboard() {
       >
         {/* HEADER */}
         <p style={{ color: "#fff", marginBottom: "1rem" }}>
-          Welcome back! Pick up where you left off or start something new.
+          Welcome back. Pick up where you left off or start something new.
         </p>
 
         {/* BUTTON ROW */}
@@ -173,19 +177,29 @@ export default function Dashboard() {
           </button>
 
           <button
-            onClick={() => setShowNewProjectForm(!showNewProjectForm)}
-            style={{
-              padding: "0.6rem 1rem",
-              borderRadius: "8px",
-              border: "none",
-              background: "#FFDB00",
-              fontWeight: "bold",
-              cursor: "pointer",
-              color: "#333",
-            }}
-          >
-            {showNewProjectForm ? "Cancel" : "➕ New Story"}
-          </button>
+  onClick={() => setShowNewProjectForm(!showNewProjectForm)}
+  disabled={projects.length >= 2}
+  style={{
+    padding: "0.6rem 1rem",
+    borderRadius: "8px",
+    border: "none",
+    background: projects.length >= 2 ? "#ccc" : "#FFDB00",
+    fontWeight: "bold",
+    cursor: projects.length >= 2 ? "not-allowed" : "pointer",
+    opacity: projects.length >= 2 ? 0.7 : 1,
+  }}
+>
+  {projects.length >= 2
+    ? "Story Limit Reached"
+    : showNewProjectForm
+    ? "Cancel"
+    : "➕ New Story"}
+</button>
+{projects.length >= 2 && (
+  <p style={{ color: "#fff", marginTop: "0.5rem" }}>
+    V1 beta users can create up to 2 stories.
+  </p>
+)}
         </div>
 
         {/* FORM */}
@@ -211,7 +225,6 @@ export default function Dashboard() {
                 flex: "1",
                 minWidth: "200px",
                 background: "#ffffff",
-                color: "#333",
               }}
             />
 
@@ -223,7 +236,6 @@ export default function Dashboard() {
                 borderRadius: "8px",
                 border: "1px solid #030303",
                 background: "#c3c9f8",
-                color: "#333",
               }}
             >
               <option value="">Genre</option>
