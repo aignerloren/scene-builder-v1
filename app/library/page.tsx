@@ -311,12 +311,12 @@ export default function Dashboard() {
                 >
                   {proj.title}
                 </div>
+                                                                    <BugReportForm />
               );
             })
           )}
         </div>
       </div>
     </div>
-                                    <BugReportForm />
   );
 }
