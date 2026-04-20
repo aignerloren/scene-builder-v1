@@ -66,8 +66,11 @@ export default function AboutPage() {
         <br></br>
 
         <p style={{color: "#333"}}>
-          The Scene Builder is an editor designed tool for building stories scene by scene. You can use the Scene Builder to break down each of your story's scenes into digital scene cards. Each scene card contains details about the scene, including characters, settings, and actions. When you start a new story in your personal library, you get to choose its primary genre so that your story starts off with four obligatory scenes to help you get started. These scenes were chosen by a real editor, using real genre expertise, resources like the Story Grid, Story by Robert McKee, and more.
-        </p>
+          The Scene Builder is an editor designed tool for building stories scene by scene using a structured approach using <a href="https://aignerlwilson.com/2022/07/10/scene-cards-fiction/" target="_blank" rel="noopener noreferrer" style={{color: "blue", textDecoration: "underline"}}>scene cards</a> to create a structured narrative you can analyze and refine.</p> 
+          <br></br>
+          <p>
+            Each scene card contains details about the scene, including characters, settings, and actions. These scene cards were designed by a real editor, using real genre expertise, resources like the Story Grid, Story by Robert McKee, and more—not by an AI or LLM.
+          </p>
 
         <br></br>
 
