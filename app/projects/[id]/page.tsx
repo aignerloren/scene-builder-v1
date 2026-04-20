@@ -408,6 +408,26 @@ const getPacingColor = (scene: Scene, index: number) => {
   if (wc < 500) return "#f1c40f"; // yellow
   return "#dcdcdc"; // neutral
 };
+const valueMap: Record<string, number> = {
+  "--": 1,
+  "-": 2,
+  "-+": 3,
+  "+-": 4,
+  "+": 5,
+  "++": 6,
+};
+
+const getMovementPoints = () => {
+  return scenes.map((scene) => {
+    const endVal = valueMap[scene.ending_value] ?? null;
+    return {
+      id: scene.id,
+      title: scene.scene_title,
+      sceneNumber: scene.scene_number,
+      y: endVal,
+    };
+  });
+};
       return (
         <>
           {/* HEALTH SCORE */}
@@ -422,46 +442,129 @@ const getPacingColor = (scene: Scene, index: number) => {
             }}
           >
             <div style={{ color:"#333", display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-  <h3 style={{ textAlign: "center", color: "#333", margin: 0 }}>Story Health:</h3>
-  <span style={{ textAlign: "center", fontSize: "1.2rem", color: "#666" }}>
+  <h2 style={{ marginTop: 0, fontSize: "1.5rem", marginBottom: "1rem", textAlign: "center" }}>Story Health:</h2>
+  <span style={{ textAlign: "center", fontSize: "1.5rem", color: "#666" }}>
     {healthScore}%
   </span>
   </div>
-  {/* PACING GRAPH */}
-  <div
-            style={{
-              marginBottom: "2rem",
-              padding: "1rem",
-              background: "#e1f7b1",
-              borderRadius: "10px",
-              textAlign: "center",
-              color: "#333",
-            }}
-          >
-<div style={{ color: "#333", marginTop: "1rem" }}>
-  <div style={{ color: "#333", fontSize: "0.9rem", marginBottom: "0.5rem" }}>
-    Scene Pacing
-  </div>
+  {/* STORY MOVEMENT GRAPH */}
+<div
+  style={{
+    marginBottom: "2rem",
+    padding: "1rem",
+    background: "#e1f7b1",
+    borderRadius: "10px",
+    color: "#333",
+  }}
+>
+  <h3 style={{ marginTop: 0, marginBottom: "1rem" }}>Story Movement</h3>
 
-  <div style={{ color: "#333", display: "flex", gap: "4px", height: "18px" }}>
-    {scenes.map((scene, i) => (
-      <div
-        key={scene.id}
-        title={`${scene.scene_title} (${getWordCount(scene)} words)`}
-        style={{
-          flex: 1,
-          background: getPacingColor(scene, i),
-          borderRadius: "4px",
-          color: "#333",
-        }}
-      />
-    ))}
-  </div>
+  {(() => {
+    const points = getMovementPoints().filter((p) => p.y !== null);
+    const chartHeight = 180;
+    const chartWidth = 100;
+    const maxY = 6;
+    const minY = 1;
 
-  <div style={{ fontSize: "0.75rem", marginTop: "0.5rem", color: "#777" }}>
-    🔴 slow (overloaded / clash) · 🟡 fast · gray = balanced
-  </div>
-</div>
+    if (points.length < 2) {
+      return (
+        <p style={{ margin: 0, color: "#666" }}>
+          Add ending values to at least two scenes to see story movement.
+        </p>
+      );
+    }
+
+    const stepX = chartWidth / (points.length - 1);
+
+    const polylinePoints = points
+      .map((point, index) => {
+        const x = index * stepX;
+        const y =
+          chartHeight -
+          (((point.y! - minY) / (maxY - minY)) * chartHeight);
+        return `${x},${y}`;
+      })
+      .join(" ");
+
+    return (
+      <div>
+        <svg
+          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+          style={{
+            width: "100%",
+            height: "220px",
+            background: "#fffdf7",
+            borderRadius: "8px",
+            border: "1px solid #d9d9d9",
+            overflow: "visible",
+          }}
+        >
+          {/* horizontal guide lines */}
+          {[1, 2, 3, 4, 5, 6].map((level) => {
+            const y =
+              chartHeight -
+              (((level - minY) / (maxY - minY)) * chartHeight);
+            return (
+              <line
+                key={level}
+                x1="0"
+                y1={y}
+                x2={chartWidth}
+                y2={y}
+                stroke="#e5e5e5"
+                strokeWidth="0.6"
+              />
+            );
+          })}
+
+          <polyline
+            fill="none"
+            stroke="#0070f3"
+            strokeWidth="2.5"
+            points={polylinePoints}
+          />
+
+          {points.map((point, index) => {
+            const x = index * stepX;
+            const y =
+              chartHeight -
+              (((point.y! - minY) / (maxY - minY)) * chartHeight);
+
+            return (
+              <circle
+                key={point.id}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="#0070f3"
+              />
+            );
+          })}
+        </svg>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+            marginTop: "0.75rem",
+            fontSize: "0.75rem",
+            color: "#666",
+            flexWrap: "wrap",
+          }}
+        >
+          {points.map((point) => (
+            <span key={point.id}>
+            </span>
+          ))}
+        </div>
+
+        <div style={{ fontSize: "0.75rem", marginTop: "0.75rem", color: "#777" }}>
+          -- mega down shift · - down shift · -+ complicated negative shift · +- complicated positive shift · + upward movement · ++ mega upward movement
+        </div>
+      </div>
+    );
+  })()}
 </div>
           </div>
 
@@ -635,49 +738,76 @@ const getPacingColor = (scene: Scene, index: number) => {
           </label>
 
           {key === "summary" ? (
-            <textarea
-              value={(selectedScene as any)[key] || ""}
-              onChange={(e) =>
-                setSelectedScene({
-                  ...selectedScene,
-                  [key]: e.target.value,
-                })
-              }
-              style={{
-                width: "100%",
-  minHeight: "120px",
-  padding: "0.6rem",
-  border: "1px solid #ccc",
-  borderRadius: "6px",
-  background: "#fff",
-  boxSizing: "border-box",
-                color: "#333",
-              }}
-            />
-          ) : (
-            <input
-              type={key === "target_word_count" ? "number" : "text"}
-              value={(selectedScene as any)[key] || ""}
-              onChange={(e) =>
-                setSelectedScene({
-                  ...selectedScene,
-                  [key]:
-                    key === "target_word_count"
-                      ? Number(e.target.value)
-                      : e.target.value,
-                })
-              }
-              style={{
-                padding: "0.6rem",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-                background: "#fff",
-                width: "100%",
-                boxSizing: "border-box",
-                color: "#333",
-              }}
-            />
-          )}
+  <textarea
+    value={(selectedScene as any)[key] || ""}
+    onChange={(e) =>
+      setSelectedScene({
+        ...selectedScene,
+        [key]: e.target.value,
+      })
+    }
+    style={{
+      width: "100%",
+      minHeight: "120px",
+      padding: "0.6rem",
+      border: "1px solid #ccc",
+      borderRadius: "6px",
+      background: "#fff",
+      boxSizing: "border-box",
+      color: "#333",
+    }}
+  />
+) : key === "beginning_value" || key === "ending_value" ? (
+  <select
+    value={(selectedScene as any)[key] || ""}
+    onChange={(e) =>
+      setSelectedScene({
+        ...selectedScene,
+        [key]: e.target.value,
+      })
+    }
+    style={{
+      padding: "0.6rem",
+      border: "1px solid #ccc",
+      borderRadius: "6px",
+      background: "#fff",
+      width: "100%",
+      boxSizing: "border-box",
+      color: "#333",
+    }}
+  >
+    <option value="">Select value</option>
+    <option value="--">--</option>
+    <option value="-">-</option>
+    <option value="-+">-+</option>
+    <option value="+-">+-</option>
+    <option value="+">+</option>
+    <option value="++">++</option>
+  </select>
+) : (
+  <input
+    type={key === "target_word_count" ? "number" : "text"}
+    value={(selectedScene as any)[key] || ""}
+    onChange={(e) =>
+      setSelectedScene({
+        ...selectedScene,
+        [key]:
+          key === "target_word_count"
+            ? Number(e.target.value)
+            : e.target.value,
+      })
+    }
+    style={{
+      padding: "0.6rem",
+      border: "1px solid #ccc",
+      borderRadius: "6px",
+      background: "#fff",
+      width: "100%",
+      boxSizing: "border-box",
+      color: "#333",
+    }}
+  />
+)}
         </div>
       ))}
 
