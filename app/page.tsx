@@ -116,9 +116,89 @@ export default function AboutPage() {
         <p>
           Whether you're a novelist, screenwriter, or game designer, the Scene Builder is a powerful tool for crafting compelling stories. Signup or login below to start building your stories.
         </p>
-        <br></br>
-        <h2 style={{ fontSize: "3.5rem", textAlign: "center", color: "#333" }}>Launches May 1, 2026</h2>
+
+
+         {/* FORM */}
+        <div
+          style={{
+            marginTop: "2rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+          }}
+        >
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              padding: "0.6rem",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+              color: "#333",
+            }}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              padding: "0.6rem",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+              color: "#333",
+            }}
+          />
+
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <button
+              onClick={handleSignUp}
+              style={{
+                flex: 1,
+                padding: "0.6rem",
+                borderRadius: "8px",
+                border: "1px solid #000",
+                background: "#FFDB00",
+                cursor: "pointer",
+                color: "#333",
+              }}
+            >
+              Sign Up
+            </button>
+
+            <button
+              onClick={handleLogin}
+              style={{
+                flex: 1,
+                padding: "0.6rem",
+                borderRadius: "8px",
+                border: "none",
+                background: "#000",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Log In
+            </button>
+          </div>
+
+          {message && (
+            <p
+              style={{
+                marginTop: "0.5rem",
+                fontSize: "0.9rem",
+                textAlign: "center",
+                color: "teal",
+              }}
+            >
+              {message}
+            </p>
+          )}
         </div>
       </div>
+    </div>
   );
 }
