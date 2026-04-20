@@ -1,3 +1,5 @@
+import BugReportForm from "@/components/BugReportForm";
+
 export default function AboutPage() { 
   return (
     <div
