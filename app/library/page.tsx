@@ -314,9 +314,9 @@ export default function Dashboard() {
               );
             })
           )}
-                                <BugReportForm />
         </div>
       </div>
     </div>
+                                    <BugReportForm />
   );
 }
