@@ -1,3 +1,5 @@
+import BugReportForm from "@/components/BugReportForm";
+
 export default function HelpPage() {
   return (
     <div
@@ -40,6 +42,8 @@ export default function HelpPage() {
       <p style={{color: "#333"}}>To access the Story Diagnostic, click the "Story Diagnostic" button in your story library. This will open a panel that analyzes your story's pacing and emotional journey based on the details of your scenes. The Story Diagnostic will help you identify potential problem areas and make revisions to create a more compelling and engaging story.</p>
       <br></br>
       <p style={{color: "#333"}}>The details within each scene card include the scene's number, title, internal and external conflict, scene conflict, beginning and ending values, story change, resolution, target word count, and scene summary. These details will help you visualize and organize your story. It will also allow the Story Diagnostics the ability to see issues you may not be able to see on your own.</p>
+      <BugReportForm />
+
       </div>
     </div>
   );
