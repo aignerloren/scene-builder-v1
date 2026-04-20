@@ -422,11 +422,22 @@ const getPacingColor = (scene: Scene, index: number) => {
             }}
           >
             <div style={{ color:"#333", display: "flex", gap: "0.5rem", alignItems: "baseline" }}>
-  <h3 style={{ color: "#333", margin: 0 }}>Story Health</h3>
-  <span style={{ fontSize: "1.2rem", color: "#666" }}>
+  <h3 style={{ textAlign: "center", color: "#333", margin: 0 }}>Story Health:</h3>
+  <span style={{ textAlign: "center", fontSize: "1.2rem", color: "#666" }}>
     {healthScore}%
   </span>
+  </div>
   {/* PACING GRAPH */}
+  <div
+            style={{
+              marginBottom: "2rem",
+              padding: "1rem",
+              background: "#e1f7b1",
+              borderRadius: "10px",
+              textAlign: "center",
+              color: "#333",
+            }}
+          >
 <div style={{ color: "#333", marginTop: "1rem" }}>
   <div style={{ color: "#333", fontSize: "0.9rem", marginBottom: "0.5rem" }}>
     Scene Pacing
