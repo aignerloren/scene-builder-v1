@@ -190,11 +190,13 @@ export default function Dashboard() {
     opacity: projects.length >= 2 ? 0.7 : 1,
   }}
 >
-  {projects.length >= 2
-    ? "Story Limit Reached"
-    : showNewProjectForm
-    ? "Cancel"
-    : "➕ New Story"}
+{projects.length >= 2 ? (
+    <span style={{ color: "#333" }}>Story Limit Reached</span>
+  ) : showNewProjectForm ? (
+    "Cancel"
+  ) : (
+    "➕ New Story"
+  )}
 </button>
 {projects.length >= 2 && (
   <p style={{ color: "#fff", marginTop: "0.5rem" }}>
