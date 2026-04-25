@@ -16,7 +16,7 @@ export default function HelpPage() {
       <div
         style={{
           width: "100%",
-          maxWidth: "600px",
+          maxWidth: "1000px",
           padding: "2rem",
           background: "rgba(255,255,255,0.85)",
           borderRadius: "16px",
