@@ -16,6 +16,10 @@ export default function Dashboard() {
 
   const [projectTitle, setProjectTitle] = useState("");
   const [projectGenre, setProjectGenre] = useState("");
+  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+const [editingProject, setEditingProject] = useState<any>(null);
+const [editTitle, setEditTitle] = useState("");
+const [editGenre, setEditGenre] = useState("");
 
   // SESSION
   const checkSession = useCallback(async () => {
@@ -50,7 +54,32 @@ export default function Dashboard() {
   };
 
   // CREATE PROJECT (unchanged logic)
-  const handleCreateProject = async (e: React.FormEvent) => {
+const handleUpdateProject = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!editingProject || !editTitle || !editGenre || !user) return;
+
+  const { error } = await supabase
+    .from("Projects")
+    .update({
+      title: editTitle,
+      genre: editGenre,
+    })
+    .eq("id", editingProject.id)
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("Update error:", error.message);
+    return;
+  }
+
+  setEditingProject(null);
+  setEditTitle("");
+  setEditGenre("");
+  fetchProjects();
+};
+
+const handleCreateProject = async (e: React.FormEvent) => {
   e.preventDefault();
 
   if (!projectTitle || !projectGenre || !user) return;
@@ -60,53 +89,53 @@ export default function Dashboard() {
     return;
   }
 
-    const { data, error } = await supabase
-      .from("Projects")
-      .insert([
-        {
-          title: projectTitle,
-          genre: projectGenre,
-          user_id: user.id,
-        },
-      ])
-      .select();
+  const { data, error } = await supabase
+    .from("Projects")
+    .insert([
+      {
+        title: projectTitle,
+        genre: projectGenre,
+        user_id: user.id,
+      },
+    ])
+    .select();
 
-    if (error) {
-      console.error("Project error:", error.message);
-      return;
-    }
+  if (error) {
+    console.error("Project error:", error.message);
+    return;
+  }
 
-    const newProjectId = data?.[0]?.id;
-    const templates = sceneTemplates[projectGenre] || [];
+  const newProjectId = data?.[0]?.id;
+  const templates = sceneTemplates[projectGenre] || [];
 
-    const scenesToInsert = templates.map((scene, index) => ({
-      story_id: newProjectId,
-      user_id: user.id,
-      scene_number: index + 1,
-      scene_title: scene.scene_title,
-      internal_conflict: scene.internal_conflict || "",
-      external_conflict: scene.external_conflict || "",
-      scene_conflict: "",
-      beginning_value: "",
-      ending_value: "",
-      summary: scene.summary || "",
-      turning_point: "",
-      story_change: "",
-      resolution: "",
-      characters: "",
-      setting: "",
-      target_word_count: 0,
-    }));
+  const scenesToInsert = templates.map((scene, index) => ({
+    story_id: newProjectId,
+    user_id: user.id,
+    scene_number: index + 1,
+    scene_title: scene.scene_title,
+    internal_conflict: scene.internal_conflict || "",
+    external_conflict: scene.external_conflict || "",
+    scene_conflict: "",
+    beginning_value: "",
+    ending_value: "",
+    summary: scene.summary || "",
+    turning_point: "",
+    story_change: "",
+    resolution: "",
+    characters: "",
+    setting: "",
+    target_word_count: 0,
+  }));
 
-    if (scenesToInsert.length > 0) {
-      await supabase.from("scenes").insert(scenesToInsert);
-    }
+  if (scenesToInsert.length > 0) {
+    await supabase.from("scenes").insert(scenesToInsert);
+  }
 
-    setProjectTitle("");
-    setProjectGenre("");
-    setShowNewProjectForm(false);
-    fetchProjects();
-  };
+  setProjectTitle("");
+  setProjectGenre("");
+  setShowNewProjectForm(false);
+  fetchProjects();
+};
 
   useEffect(() => {
     checkSession();
@@ -190,80 +219,164 @@ export default function Dashboard() {
     opacity: projects.length >= 2 ? 0.7 : 1,
   }}
 >
-{projects.length >= 2 ? (
+  {projects.length >= 2 ? (
     <span style={{ color: "#333" }}>Story Limit Reached</span>
   ) : showNewProjectForm ? (
     "Cancel"
   ) : (
     "➕ New Story"
+    
   )}
 </button>
 {projects.length >= 2 && (
   <p style={{ color: "#fff", marginTop: "0.5rem" }}>
-    The current version of Scene Builder only allows for 2 stories per user. More coming soon!
+    V1 beta users can create up to 2 stories.
   </p>
 )}
         </div>
 
-        {/* FORM */}
-        {showNewProjectForm && (
-          <form
-            onSubmit={handleCreateProject}
-            style={{
-              marginBottom: "2rem",
-              display: "flex",
-              gap: "0.5rem",
-              flexWrap: "wrap",
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Story Title"
-              value={projectTitle}
-              onChange={(e) => setProjectTitle(e.target.value)}
-              style={{
-                padding: "0.6rem",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-                flex: "1",
-                minWidth: "200px",
-                background: "#ffffff",
-              }}
-            />
+{/* FORM */}
+{editingProject && (
+  <form
+    onSubmit={handleUpdateProject}
+    style={{
+      marginBottom: "2rem",
+      display: "flex",
+      gap: "0.5rem",
+      flexWrap: "wrap",
+      padding: "1rem",
+      background: "rgba(255,255,255,0.2)",
+      borderRadius: "12px",
+    }}
+  >
+    <input
+      type="text"
+      placeholder="Story Title"
+      value={editTitle}
+      onChange={(e) => setEditTitle(e.target.value)}
+      style={{
+        padding: "0.6rem",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        flex: "1",
+        minWidth: "200px",
+        background: "#fff",
+        color: "#333",
+      }}
+    />
 
-            <select
-              value={projectGenre}
-              onChange={(e) => setProjectGenre(e.target.value)}
-              style={{
-                padding: "0.6rem",
-                borderRadius: "8px",
-                border: "1px solid #030303",
-                background: "#c3c9f8",
-              }}
-            >
-              <option value="">Genre</option>
-              <option value="Literary">Literary</option>
-              <option value="Horror">Horror</option>
-              <option value="SciFi">SciFi</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Thriller">Thriller</option>
-            </select>
+    <select
+      value={editGenre}
+      onChange={(e) => setEditGenre(e.target.value)}
+      style={{
+        padding: "0.6rem",
+        borderRadius: "8px",
+        border: "1px solid #030303",
+        background: "#c3c9f8",
+        color: "#333",
+      }}
+    >
+      <option value="">Genre</option>
+      <option value="Literary">Literary</option>
+      <option value="Horror">Horror</option>
+      <option value="SciFi">SciFi</option>
+      <option value="Fantasy">Fantasy</option>
+      <option value="Thriller">Thriller</option>
+    </select>
 
-            <button
-              type="submit"
-              style={{
-                padding: "0.6rem 1rem",
-                borderRadius: "8px",
-                border: "none",
-                background: "#23a746",
-                color: "#fff",
-                cursor: "pointer",
-              }}
-            >
-              Create
-            </button>
-          </form>
-        )}
+    <button
+      type="submit"
+      style={{
+        padding: "0.6rem 1rem",
+        borderRadius: "8px",
+        border: "none",
+        background: "#23a746",
+        color: "#fff",
+        cursor: "pointer",
+      }}
+    >
+      Save Story
+    </button>
+
+    <button
+      type="button"
+      onClick={() => {
+        setEditingProject(null);
+        setEditTitle("");
+        setEditGenre("");
+      }}
+      style={{
+        padding: "0.6rem 1rem",
+        borderRadius: "8px",
+        border: "none",
+        background: "#3e2e2e",
+        color: "#fff",
+        cursor: "pointer",
+      }}
+    >
+      Cancel
+    </button>
+  </form>
+)}
+
+{showNewProjectForm && !editingProject && (
+  <form
+    onSubmit={handleCreateProject}
+    style={{
+      marginBottom: "2rem",
+      display: "flex",
+      gap: "0.5rem",
+      flexWrap: "wrap",
+    }}
+  >
+    <input
+      type="text"
+      placeholder="Story Title"
+      value={projectTitle}
+      onChange={(e) => setProjectTitle(e.target.value)}
+      style={{
+        padding: "0.6rem",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        flex: "1",
+        minWidth: "200px",
+        background: "#ffffff",
+      }}
+    />
+
+    <select
+      value={projectGenre}
+      onChange={(e) => setProjectGenre(e.target.value)}
+      style={{
+        padding: "0.6rem",
+        borderRadius: "8px",
+        border: "1px solid #030303",
+        background: "#c3c9f8",
+      }}
+    >
+      <option value="">Genre</option>
+      <option value="Literary">Literary</option>
+      <option value="Horror">Horror</option>
+      <option value="SciFi">SciFi</option>
+      <option value="Fantasy">Fantasy</option>
+      <option value="Thriller">Thriller</option>
+    </select>
+
+    <button
+      type="submit"
+      style={{
+        padding: "0.6rem 1rem",
+        borderRadius: "8px",
+        border: "none",
+        background: "#23a746",
+        color: "#fff",
+        cursor: "pointer",
+      }}
+    >
+      Create
+    </button>
+  </form>
+)}
 
         {/* BOOK SHELF */}
         <div
@@ -286,39 +399,89 @@ export default function Dashboard() {
 
               return (
                 <div
-                  key={proj.id}
-                  onClick={() => router.push(`/projects/${proj.id}`)}
-                  style={{
-                    width: "120px",
-                    height: "200px",
-                    background: bookColors[i % bookColors.length],
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "0.5rem",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    boxShadow: "0 6px 12px rgba(0,0,0,0.25)",
-                    transition: "transform 0.15s ease",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "translateY(-6px)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "translateY(0px)")
-                  }
-                >
-                  {proj.title}
-                </div>
+  key={proj.id}
+  onMouseEnter={() => setHoveredProjectId(proj.id)}
+  onMouseLeave={() => setHoveredProjectId(null)}
+  style={{
+    width: "120px",
+    height: "200px",
+    background: bookColors[i % bookColors.length],
+    borderRadius: "6px",
+    cursor: "default",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "0.5rem",
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    boxShadow: "0 6px 12px rgba(0,0,0,0.25)",
+    transition: "transform 0.15s ease",
+    position: "relative",
+    transform: hoveredProjectId === proj.id ? "translateY(-6px)" : "translateY(0px)",
+  }}
+>
+  <div>{proj.title}</div>
+
+  {hoveredProjectId === proj.id && (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "rgba(0,0,0,0.65)",
+        borderRadius: "6px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "0.5rem",
+        padding: "0.5rem",
+      }}
+    >
+      <button
+        onClick={() => {
+          setEditingProject(proj);
+          setEditTitle(proj.title);
+          setEditGenre(proj.genre);
+        }}
+        style={{
+          padding: "0.45rem 0.6rem",
+          borderRadius: "6px",
+          border: "none",
+          background: "#FFDB00",
+          color: "#333",
+          cursor: "pointer",
+          fontWeight: "bold",
+          width: "100%",
+        }}
+      >
+        Edit Story
+      </button>
+
+      <button
+        onClick={() => router.push(`/projects/${proj.id}`)}
+        style={{
+          padding: "0.45rem 0.6rem",
+          borderRadius: "6px",
+          border: "none",
+          background: "#23a746",
+          color: "#fff",
+          cursor: "pointer",
+          fontWeight: "bold",
+          width: "100%",
+        }}
+      >
+        Build Story
+      </button>
+    </div>
+  )}
+</div>
               );
             })
           )}
-                                                                              <BugReportForm />
         </div>
       </div>
+      <BugReportForm />
     </div>
   );
 }
