@@ -35,6 +35,11 @@ export default function NavBar() {
     setOpen(false);
   };
 
+  const goPrivacypolicy = () => {
+    router.push("/privacy-policy");
+    setOpen(false);
+  };
+
   return (
     <div
       style={{
@@ -94,14 +99,14 @@ export default function NavBar() {
             >
               Home
             </div>
-            
+
             <div
               onClick={goStoryLibrary}
               style={itemStyle}
             >
               Story Library
             </div>
-            
+
             <div
               onClick={goWritingHelp}
               style={itemStyle}
@@ -114,6 +119,12 @@ export default function NavBar() {
               style={itemStyle}
             >
               About
+            </div>
+            <div
+              onClick={goPrivacypolicy}
+              style={itemStyle}
+            >
+              Privacy Policy
             </div>
           </div>
         )}
