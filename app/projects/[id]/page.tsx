@@ -36,6 +36,23 @@ export default function StoryPage() {
   const [showDiagnostic, setShowDiagnostic] = useState(false);
   const [draggedScene, setDraggedScene] = useState<Scene | null>(null);
 
+  const fieldHelpText: Record<string, string> = {
+    scene_number: "The order this scene appears in your story. Change this number to move the scene.",
+    scene_title: "A short working title for this scene so you can identify it quickly.",
+    internal_conflict: "The character’s inner struggle in this scene. This is what they want, fear, deny, or wrestle with internally.",
+    external_conflict: "The outside pressure or obstacle acting against the character in this scene.",
+    scene_conflict: "The main tension driving the scene. This is the central problem, argument, obstacle, or dramatic question.",
+    beginning_value: "The emotional or story value at the start of the scene. Choose the state the scene begins with. + is good change, - is bad change.",
+    ending_value: "The emotional or story value at the end of the scene. A strong scene usually changes from where it began. + is good change, - is bad change.",
+    turning_point: "The moment that changes the direction of the scene. This is where new pressure, information, or choice enters.",
+    story_change: "What changes in the plot, world, or character because this scene exists.",
+    resolution: "How is the scene's conflict resolved?",
+    characters: "The characters who appear in this scene.",
+    setting: "Where the scene takes place.",
+    target_word_count: "Your planned or actual word count for the scene. This helps diagnose pacing.",
+    summary: "A short description of what happens in the scene.",
+  };
+
   // ✅ Get user
   useEffect(() => {
     const getUser = async () => {
@@ -466,6 +483,22 @@ const getMovementPoints = () => {
     const chartWidth = 100;
     const maxY = 6;
     const minY = 1;
+    const fieldHelpText: Record<string, string> = {
+  scene_number: "The order this scene appears in your story. Change this number to move the scene.",
+  scene_title: "A short working title for this scene so you can identify it quickly.",
+  internal_conflict: "The character’s inner struggle in this scene. This is what they want, fear, deny, or wrestle with internally.",
+  external_conflict: "The outside pressure or obstacle acting against the character in this scene.",
+  scene_conflict: "The main tension driving the scene. This is the central problem, argument, obstacle, or dramatic question.",
+  beginning_value: "The emotional or story value at the start of the scene. Choose the state the scene begins with.",
+  ending_value: "The emotional or story value at the end of the scene. A strong scene usually changes from where it began.",
+  turning_point: "The moment that changes the direction of the scene. This is where new pressure, information, or choice enters.",
+  story_change: "What changes in the plot, world, or character because this scene exists.",
+  resolution: "How this scene lands. This does not have to solve everything, but it should leave the story in a new state.",
+  characters: "The characters who appear in this scene. This helps track who is carrying the story.",
+  setting: "Where the scene takes place. This helps track location, atmosphere, and scene grounding.",
+  target_word_count: "Your planned or actual word count for the scene. This helps diagnose pacing.",
+  summary: "A short description of what happens in the scene.",
+};
 
     if (points.length < 2) {
       return (
@@ -709,7 +742,9 @@ const getMovementPoints = () => {
       <h2 style={{ color: "#333", gridColumn: "1 / -1", marginBottom: "1rem" }}>
         Editing: {selectedScene.scene_title}
       </h2>
-
+<p style={{ color: "#fff", gridColumn: "1 / -1", marginBottom: "1rem", fontStyle: "italic", background: "#4d8638f1", padding: "0.75rem", borderRadius: "6px"}}>
+  Hover over the "?" icons to see guidance on what to fill in for each field and how it impacts your story.
+</p> 
       {[
         "scene_number",
         "scene_title",
@@ -727,16 +762,43 @@ const getMovementPoints = () => {
         "summary",
       ].map((key) => (
         <div key={key} style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
-              fontSize: "0.8rem",
-              marginBottom: "0.25rem",
-              textTransform: "capitalize",
-              color: "#333",
-            }}
-          >
-            {key.replace(/_/g, " ")}
-          </label>
+          <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "0.35rem",
+    marginBottom: "0.25rem",
+    position: "relative",
+  }}
+>
+  <label
+    style={{
+      fontSize: "0.8rem",
+      textTransform: "capitalize",
+      color: "#333",
+    }}
+  >
+    {key.replace(/_/g, " ")}
+  </label>
+
+  <span
+    title={fieldHelpText[key]}
+    style={{
+      width: "18px",
+      height: "18px",
+      borderRadius: "50%",
+      background: "#333",
+      color: "#fff",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "0.75rem",
+      cursor: "help",
+    }}
+  >
+    ?
+  </span>
+</div>
 
           {key === "summary" ? (
   <textarea
@@ -827,10 +889,10 @@ const getMovementPoints = () => {
       >
         Save Scene
       </button>
+          <BugReportForm />
     </div>
   )
 )}
-      <BugReportForm />
     </div>
   );
 }
