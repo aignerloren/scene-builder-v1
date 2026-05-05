@@ -23,6 +23,7 @@ interface Scene {
   characters: string;
   setting: string;
   target_word_count: number;
+  is_pinned: boolean;
 }
 
 export default function StoryPage() {
@@ -34,6 +35,7 @@ export default function StoryPage() {
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [selectedScene, setSelectedScene] = useState<Scene | null>(null);
   const [showDiagnostic, setShowDiagnostic] = useState(false);
+  const [newSceneNumber, setNewSceneNumber] = useState("");
   const [draggedScene, setDraggedScene] = useState<Scene | null>(null);
 
   const fieldHelpText: Record<string, string> = {
@@ -87,20 +89,64 @@ export default function StoryPage() {
 
   // ✅ Create scene
   const handleCreateScene = async () => {
-    if (!sceneTitle || !storyId || !userId) return;
+  if (!sceneTitle || !storyId || !userId) return;
 
-    await supabase.from("scenes").insert([
-      {
-        story_id: storyId,
-        user_id: userId,
-        scene_number: scenes.length + 1,
-        scene_title: sceneTitle,
-      },
-    ]);
+  const sceneNumberToUse =
+  newSceneNumber.trim() !== ""
+    ? Number(newSceneNumber)
+    : scenes.length + 1;
 
-    setSceneTitle("");
-    fetchScenes();
-  };
+if (!sceneNumberToUse || sceneNumberToUse < 1) {
+  alert("Please enter a valid scene number.");
+  return;
+}
+const pinnedSceneAtNumber = scenes.find(
+  (scene) => scene.scene_number === sceneNumberToUse && scene.is_pinned
+);
+
+if (pinnedSceneAtNumber) {
+  alert(`Scene ${sceneNumberToUse} is pinned. Choose another scene number.`);
+  return;
+}
+const duplicateScene = scenes.find(
+  (scene) => scene.scene_number === sceneNumberToUse
+);
+
+if (duplicateScene) {
+  const scenesToShift = scenes
+  .filter(
+    (scene) =>
+      !scene.is_pinned &&
+      scene.scene_number >= sceneNumberToUse
+  )
+  .sort((a, b) => b.scene_number - a.scene_number);
+
+  for (const scene of scenesToShift) {
+    const { error } = await supabase
+      .from("scenes")
+      .update({ scene_number: scene.scene_number + 1 })
+      .eq("id", scene.id);
+
+    if (error) {
+      console.error("Error shifting scenes:", error.message);
+      return;
+    }
+  }
+}
+
+  await supabase.from("scenes").insert([
+    {
+      story_id: storyId,
+      user_id: userId,
+      scene_number: sceneNumberToUse,
+      scene_title: sceneTitle,
+    },
+  ]);
+
+  setSceneTitle("");
+  setNewSceneNumber("");
+  fetchScenes();
+};
   useEffect(() => {
   if (!selectedScene) return;
 
@@ -113,68 +159,39 @@ export default function StoryPage() {
 
   // ✅ Update scene + reorder safely
   const handleUpdateScene = async () => {
-    if (!selectedScene) return;
+  if (!selectedScene) return;
 
-    const oldScene = scenes.find((s) => s.id === selectedScene.id);
-    if (!oldScene) return;
+  const newSceneNumber = Number(selectedScene.scene_number);
 
-    const oldPos = oldScene.scene_number;
-    const newPos = selectedScene.scene_number;
+  if (!newSceneNumber || newSceneNumber < 1) {
+    alert("Please enter a valid scene number.");
+    return;
+  }
 
-    let updatedScenes = [...scenes];
+  const duplicateScene = scenes.find(
+    (scene) =>
+      scene.scene_number === newSceneNumber &&
+      scene.id !== selectedScene.id
+  );
 
-    if (oldPos !== newPos) {
-      const fromIndex = updatedScenes.findIndex((s) => s.id === selectedScene.id);
-      const [moved] = updatedScenes.splice(fromIndex, 1);
+  if (duplicateScene) {
+    alert(`Scene ${newSceneNumber} already exists. Choose another scene number.`);
+    return;
+  }
 
-      updatedScenes.splice(newPos - 1, 0, moved);
+  const { error } = await supabase
+    .from("scenes")
+    .update(selectedScene)
+    .eq("id", selectedScene.id);
 
-      const reordered = updatedScenes.map((s, i) => ({
-        ...s,
-        scene_number: i + 1,
-      }));
+  if (error) {
+    console.error("Error updating scene:", error.message);
+    return;
+  }
 
-      await Promise.all(
-        reordered.map((s) =>
-          supabase.from("scenes").update({ scene_number: s.scene_number }).eq("id", s.id)
-        )
-      );
-    }
-
-    await supabase.from("scenes").update(selectedScene).eq("id", selectedScene.id);
-
-    fetchScenes();
-    alert("Saved");
-  };
-
-  // ✅ Drag reorder
-  const handleDrop = async (targetScene: Scene) => {
-    if (!draggedScene || draggedScene.id === targetScene.id) return;
-
-    let updated = [...scenes];
-
-    const fromIndex = updated.findIndex((s) => s.id === draggedScene.id);
-    const toIndex = updated.findIndex((s) => s.id === targetScene.id);
-
-    const [moved] = updated.splice(fromIndex, 1);
-    updated.splice(toIndex, 0, moved);
-
-    const reordered = updated.map((s, i) => ({
-      ...s,
-      scene_number: i + 1,
-    }));
-
-    setScenes(reordered);
-
-    await Promise.all(
-      reordered.map((s) =>
-        supabase.from("scenes").update({ scene_number: s.scene_number }).eq("id", s.id)
-      )
-    );
-
-    fetchScenes();
-  };
-
+  await fetchScenes();
+  alert("Saved");
+};
   const statCard = {
     padding: "1rem",
     background: "#fff",
@@ -190,7 +207,72 @@ export default function StoryPage() {
     fontSize: "1.25rem",
     fontWeight: "bold",
   };
-  
+  const handleDrop = async (targetScene: Scene) => {
+  if (!draggedScene || draggedScene.id === targetScene.id) return;
+
+  if (draggedScene.is_pinned) {
+    alert("This scene is pinned. Unpin it before moving it.");
+    return;
+  }
+
+  const oldNumber = draggedScene.scene_number;
+  const newNumber = targetScene.scene_number;
+
+  const pinnedSceneAtNumber = scenes.find(
+    (scene) => scene.scene_number === newNumber && scene.is_pinned
+  );
+
+  if (pinnedSceneAtNumber) {
+    alert(`Scene ${newNumber} is pinned. Choose another position.`);
+    return;
+  }
+
+  if (newNumber < oldNumber) {
+    const scenesToShift = scenes
+      .filter(
+        (scene) =>
+          !scene.is_pinned &&
+          scene.id !== draggedScene.id &&
+          scene.scene_number >= newNumber &&
+          scene.scene_number < oldNumber
+      )
+      .sort((a, b) => b.scene_number - a.scene_number);
+
+    for (const scene of scenesToShift) {
+      await supabase
+        .from("scenes")
+        .update({ scene_number: scene.scene_number + 1 })
+        .eq("id", scene.id);
+    }
+  }
+
+  if (newNumber > oldNumber) {
+    const scenesToShift = scenes
+      .filter(
+        (scene) =>
+          !scene.is_pinned &&
+          scene.id !== draggedScene.id &&
+          scene.scene_number <= newNumber &&
+          scene.scene_number > oldNumber
+      )
+      .sort((a, b) => a.scene_number - b.scene_number);
+
+    for (const scene of scenesToShift) {
+      await supabase
+        .from("scenes")
+        .update({ scene_number: scene.scene_number - 1 })
+        .eq("id", scene.id);
+    }
+  }
+
+  await supabase
+    .from("scenes")
+    .update({ scene_number: newNumber })
+    .eq("id", draggedScene.id);
+
+  setDraggedScene(null);
+  await fetchScenes();
+};
 
   function getPacingColor(scene: Scene, index: number) {
     const getWordCount = (s: Scene) => s?.target_word_count || 0;
@@ -227,10 +309,24 @@ export default function StoryPage() {
         style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}
       >
         <input
+  type="number"
+  placeholder="Scene #"
+  value={newSceneNumber}
+  onChange={(e) => setNewSceneNumber(e.target.value)}
+  style={{
+    color: "#000000",
+    width: "120px",
+    padding: "0.6rem",
+    border: "1px solid #2d1034",
+    borderRadius: "6px",
+    boxSizing: "border-box",
+  }}
+/>
+        <input
           value={sceneTitle}
           onChange={(e) => setSceneTitle(e.target.value)}
           placeholder="Enter Scene Title"
-          style={{ color: "#333", width: "100%", padding: "0.6rem", border: "1px solid #ccc", borderRadius: "6px", boxSizing: "border-box"}}
+          style={{ color: "#333", width: "100%", padding: "0.6rem", border: "1px solid #321850", borderRadius: "6px", boxSizing: "border-box"}}
         />
         <button 
             style={{
@@ -247,7 +343,7 @@ export default function StoryPage() {
 
       {/* SCENE BOARD */}
       <p style={{ color: "#333", textAlign: "center" }}>
-        Drag and drop scenes OR edit scene number to reorder
+        Drag scene cards to reorder, or edit a scene number and save.
       </p>
 
       <div
@@ -265,12 +361,12 @@ export default function StoryPage() {
       >
         {scenes.map((scene) => (
           <div
-            key={scene.id}
-            draggable
-            onDragStart={() => setDraggedScene(scene)}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={() => handleDrop(scene)}
-            onClick={() => setSelectedScene(scene)}
+  key={scene.id}
+  draggable
+  onDragStart={() => setDraggedScene(scene)}
+  onDragOver={(e) => e.preventDefault()}
+  onDrop={() => handleDrop(scene)}
+  onClick={() => setSelectedScene(scene)}
             style={{
   width: "200px",
   minHeight: "180px",
@@ -285,8 +381,9 @@ export default function StoryPage() {
               boxShadow: `0 0 0 3px ${getPacingColor(scene, scenes.findIndex(s => s.id === scene.id))}`,
             }}
           >
-            <strong>{scene.scene_number}</strong>
-            <div>{scene.scene_title}</div>
+<strong>
+  {scene.scene_number} {scene.is_pinned ? "📌" : ""}
+</strong>            <div>{scene.scene_title}</div>
           </div>
         ))}
       </div>
@@ -303,7 +400,7 @@ export default function StoryPage() {
             cursor: "pointer",
           }}
         >
-          📊 {showDiagnostic ? "Back to Editor" : "Run Story Diagnostic"}
+           {showDiagnostic ? "🖋️ Back to Editor" : "📊 Run Story Diagnostic"}
         </button>
       </div>
 
@@ -745,6 +842,26 @@ const getMovementPoints = () => {
 <p style={{ color: "#fff", gridColumn: "1 / -1", marginBottom: "1rem", fontStyle: "italic", background: "#4d8638f1", padding: "0.75rem", borderRadius: "6px"}}>
   Hover over the "?" icons to see guidance on what to fill in for each field and how it impacts your story.
 </p> 
+<button
+  type="button"
+  onClick={() =>
+    setSelectedScene({
+      ...selectedScene,
+      is_pinned: !selectedScene.is_pinned,
+    })
+  }
+  style={{
+    gridColumn: "1 / -1",
+    padding: "0.6rem",
+    borderRadius: "8px",
+    border: "none",
+    background: selectedScene.is_pinned ? "#FFDB00" : "#ddd",
+    color: "#333",
+    cursor: "pointer",
+  }}
+>
+  {selectedScene.is_pinned ? "📌 Scene Pinned" : "📍 Pin Scene"}
+</button>
       {[
         "scene_number",
         "scene_title",
