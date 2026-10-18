@@ -118,6 +118,10 @@ export default function AboutPage() {
           Whether you're a novelist, screenwriter, or game designer, the Scene Builder is a powerful tool for crafting compelling stories. Signup or login below to start building your stories.
         </p>
 
+        <p style={{color: "#333"}}>
+         For help, questions, or issues, please contact site and tool owner, Aigner Loren Wilson: aignerloren[@]proton.me
+        </p>
+
 
          {/* FORM */}
         <div
