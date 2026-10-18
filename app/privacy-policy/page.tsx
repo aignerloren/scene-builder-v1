@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
 <br></br>
 <p style={{ color:"#333"}}>For any questions related to your privacy, data, or IP, please use the bug report form (little ladybug on the bottom of the screen) to reach out.</p>
 <br></br>
-<p style={{ color:"#333"}}>Tech-savvy or just want to know what makes Scene Builder tick? You can dig into the code at my <a href="https://github.com/aignerloren/scene-builder-v1">Github</a> for the program, where you can see the build, code, and how the program works.</p>
+<p style={{ color:"#333"}}>Tech-savvy or just want to know what makes Scene Builder tick? You can dig into the code at my <a href="https://github.com/aignerloren/scene-builder-v1" target="_blank" rel="noopener noreferrer" style={{ color: "#007bff", textDecoration: "underline"}}>Github</a> for the program, where you can see the build, code, and how the program works.</p>
 <br></br>
 <h2 style={{ textAlign: "center", color: "#333", fontSize: "1.5rem" }}>AI Policy</h2>
 <br></br>
